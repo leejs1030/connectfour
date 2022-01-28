@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class CellTest {
     @Test
-    public void testCellEquals(){
+    public void cellEqualsTest(){
         assertEquals(new Cell('a'), 'a');
         assertEquals(new Cell('a'), new Cell('a'));
         assertNotEquals(new Cell('a'), 'b');
@@ -15,9 +15,18 @@ public class CellTest {
     }
 
     @Test
-    public void testCellSet(){
+    public void cellSetTest(){
         Cell temp = new Cell(), a = new Cell('a');
         assertEquals(a, temp.set("a"));
         assertEquals(a, temp.set('a'));
+    }
+
+    @Test
+    public void cloneTest() throws CloneNotSupportedException{
+        Cell a = new Cell('a');
+        Cell temp = (Cell)a.clone();
+        assertEquals(a, temp);
+        temp.set('b');
+        assertNotEquals(a, temp);
     }
 }
