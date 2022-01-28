@@ -3,6 +3,7 @@ package com.leejs1030.connectfour;
 import org.junit.Test;
 
 public class WrongInputExceptionTest {
+    
     @Test
     public void printErrorTest(){
         try{
@@ -15,5 +16,11 @@ public class WrongInputExceptionTest {
             System.out.println(err.getStackTrace());
             System.out.println("end");
         }
+    }
+
+    @Test
+    public void testWrongInputException() throws WrongInputException{
+        System.out.println(new WrongInputException(0));
+        System.out.println(new WrongInputException(1));
     }
 }
