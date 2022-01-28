@@ -1,6 +1,6 @@
 package com.leejs1030.connectfour;
 
-public class Cell implements Cloneable{
+public class Cell{
     private char val;
     public Cell(){this.val = '.';};
     public Cell(char val){this.val = val;};
@@ -28,9 +28,5 @@ public class Cell implements Cloneable{
 
     public char get(){
         return this.val;
-    }
-
-    public Object clone() throws CloneNotSupportedException{
-        return super.clone();
     }
 }
