@@ -1,4 +1,4 @@
-package com.leejs1030.connectfour;
+package com.leejs1030.connectfour.myexception;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.leejs1030.connectfour;
+package com.leejs1030.connectfour.datastructure;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

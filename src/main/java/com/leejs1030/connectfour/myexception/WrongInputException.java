@@ -1,4 +1,4 @@
-package com.leejs1030.connectfour;
+package com.leejs1030.connectfour.myexception;
 
 interface WrongInputType { int OUT_OF_RANGE = 0, ALREADY_FULL = 1; }
 

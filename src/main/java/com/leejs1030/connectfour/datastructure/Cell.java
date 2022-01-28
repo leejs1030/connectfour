@@ -1,4 +1,4 @@
-package com.leejs1030.connectfour;
+package com.leejs1030.connectfour.datastructure;
 
 public class Cell{
     private char val;
