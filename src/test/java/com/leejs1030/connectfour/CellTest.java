@@ -22,7 +22,7 @@ public class CellTest {
     }
 
     @Test
-    public void cloneTest() throws CloneNotSupportedException{
+    public void cloneTest(){
         Cell a = new Cell('a');
         Cell temp = new Cell(a);
         assertEquals(a, temp);
