@@ -4,6 +4,7 @@ public class Cell implements Cloneable{
     private char val;
     public Cell(){this.val = '.';};
     public Cell(char val){this.val = val;};
+    public Cell(Cell c) { this.val = c.val; }
 
     @Override
     public boolean equals(Object obj) {

@@ -24,7 +24,7 @@ public class CellTest {
     @Test
     public void cloneTest() throws CloneNotSupportedException{
         Cell a = new Cell('a');
-        Cell temp = (Cell)a.clone();
+        Cell temp = new Cell(a);
         assertEquals(a, temp);
         temp.set('b');
         assertNotEquals(a, temp);
