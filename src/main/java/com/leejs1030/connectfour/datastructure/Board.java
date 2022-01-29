@@ -31,8 +31,8 @@ public class Board{
         }
     }
     
-
     private Cell[][] board;
+
     public Board(){
         this.board = new Cell[6][7];
         initializeBoard();
