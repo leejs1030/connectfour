@@ -68,7 +68,7 @@ public class Board{
         return this.board[row][col].get();
     }
 
-    private int getTop(int col){
+    public int getTop(int col){
         int r;
         for(r = 6; r > 0; r--){
             if(!this.board[r - 1][col].equals('.')) break;
