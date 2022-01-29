@@ -57,11 +57,13 @@ public class Board{
 
     public void showBoard(){
         for(int i = 5; i >= 0; i--){
+            System.out.print((i + 1) + " ");
             for(int j = 0; j < 7; j++){
                 System.out.print(board[i][j] + " ");
             }
             System.out.println();
         }
+        System.out.println("0 1 2 3 4 5 6 7");
     }
 
     public char get(int row, int col){
