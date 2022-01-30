@@ -1,5 +1,6 @@
 package com.leejs1030.connectfour.datastructure;
 
+import com.leejs1030.connectfour.consts.consts;
 import com.leejs1030.connectfour.myexception.WrongInputException;
 
 public class Board{
@@ -34,36 +35,38 @@ public class Board{
     private Cell[][] board;
 
     public Board(){
-        this.board = new Cell[6][7];
+        this.board = new Cell[consts.MAXROW][consts.MAXCOL];
         initializeBoard();
     }
 
     public Board(Board b){
-        this.board = new Cell[6][7];
-        for(int i = 0; i < 6; i++){
-            for(int j = 0; j < 7; j++){
+        this.board = new Cell[consts.MAXROW][consts.MAXCOL];
+        for(int i = 0; i < consts.MAXROW; i++){
+            for(int j = 0; j < consts.MAXCOL; j++){
                 this.board[i][j] = new Cell(b.board[i][j]);
             }
         }
     }
 
     private void initializeBoard(){
-        for(int i = 0; i < 6; i++){
-            for(int j = 0; j < 7; j++){
+        for(int i = 0; i < consts.MAXROW; i++){
+            for(int j = 0; j < consts.MAXCOL; j++){
                 board[i][j] = new Cell();
             }
         }
     }
 
     public void showBoard(){
-        for(int i = 5; i >= 0; i--){
+        for(int i = consts.MAXROW - 1; i >= 0; i--){
             System.out.print((i + 1) + " ");
-            for(int j = 0; j < 7; j++){
+            for(int j = 0; j < consts.MAXCOL; j++){
                 System.out.print(board[i][j] + " ");
             }
             System.out.println();
         }
-        System.out.println("0 1 2 3 4 5 6 7");
+        System.out.println("0 ");
+        for(int j = 0; j < consts.MAXCOL; j++) System.out.print(j + 1 + " ");
+        System.out.println();
     }
 
     public char get(int row, int col){
@@ -72,7 +75,7 @@ public class Board{
 
     public int getTop(int col){
         int r;
-        for(r = 6; r > 0; r--){
+        for(r = consts.MAXROW; r > 0; r--){
             if(!this.board[r - 1][col].equals('.')) break;
         }
         return r;
@@ -80,7 +83,7 @@ public class Board{
 
     public int insertChip(int col, char val) throws WrongInputException {
         int r = getTop(col);
-        if(r == 6) throw new WrongInputException(1);
+        if(r == consts.MAXCOL) throw new WrongInputException(1);
         this.board[r][col].set(val);
         return r;
     }
@@ -92,8 +95,8 @@ public class Board{
     @Override
     public boolean equals(Object obj) {
         Board target = (Board)obj;
-        for(int i = 0; i < 6; i++){
-            for(int j = 0; j < 7; j++){
+        for(int i = 0; i < consts.MAXROW; i++){
+            for(int j = 0; j < consts.MAXCOL; j++){
                 if(!this.board[i][j].equals(target.board[i][j])) return false;
             }
         }
