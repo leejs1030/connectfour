@@ -54,6 +54,7 @@ public class Game{
                 return col;
             } catch(InputMismatchException err){
                 System.out.println("정수로 입력해 주세요!");
+                sc.nextLine();
             }catch(WrongInputException err){
                 System.out.println(err.getMessage());
             }
@@ -63,7 +64,7 @@ public class Game{
     private int getUserInput() throws WrongInputException, InputMismatchException{
         System.out.print("몇 번째 열에 놓으시겠습니까? ");
         int pos = sc.nextInt() - 1;
-        if(!(0 < pos && pos < consts.MAXCOL)) throw new WrongInputException(0);
+        if(!(0 <= pos && pos < consts.MAXCOL)) throw new WrongInputException(0);
         // else if(this.board.isFull(pos)) throw new WrongInputException(1);
         return pos;
     }
