@@ -4,4 +4,5 @@ public interface Consts {
     int MAXROW = 6, MAXCOL = 7;
     char CHIP0 = 'O', CHIP1 = 'X', BLANK = '.';
     int AITURN = 0;
+    int MAXDEPTH = 10;
 }
