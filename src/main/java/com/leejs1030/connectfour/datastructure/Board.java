@@ -64,7 +64,7 @@ public class Board{
             }
             System.out.println();
         }
-        System.out.println("0 ");
+        System.out.print("0 ");
         for(int j = 0; j < Consts.MAXCOL; j++) System.out.print(j + 1 + " ");
         System.out.println();
     }
