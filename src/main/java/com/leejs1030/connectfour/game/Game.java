@@ -3,6 +3,7 @@ package com.leejs1030.connectfour.game;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import com.leejs1030.connectfour.ai.AI;
 import com.leejs1030.connectfour.consts.Consts;
 import com.leejs1030.connectfour.datastructure.Board;
 import com.leejs1030.connectfour.myexception.WrongInputException;
@@ -25,6 +26,24 @@ public class Game{
             showTurn();
             int col = useTurn();
             if(isFinished(this.board.getTop(col) - 1, col)) winner = this.turn;
+            changeTurn();
+        }
+        return winner;
+    }
+
+    public int playWithAI(){
+        AI player0 = new AI(this.board);
+        int winner = -1;
+        while(winner < 0){
+            board.showBoard();
+            showTurn();
+            if(turn == Consts.AITURN) {
+                int col = player0.useTurn();
+                if(isFinished(this.board.getTop(col) - 1, col)) winner = this.turn;
+            } else{
+                int col = useTurn();
+                if(isFinished(this.board.getTop(col) - 1, col)) winner = this.turn;
+            }
             changeTurn();
         }
         return winner;
