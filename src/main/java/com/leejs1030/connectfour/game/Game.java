@@ -3,7 +3,7 @@ package com.leejs1030.connectfour.game;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.leejs1030.connectfour.consts.consts;
+import com.leejs1030.connectfour.consts.Consts;
 import com.leejs1030.connectfour.datastructure.Board;
 import com.leejs1030.connectfour.myexception.WrongInputException;
 
@@ -33,14 +33,14 @@ public class Game{
     private void changeTurn(){ turn ^= 1; }
 
     private char getChip(){
-        if(turn == 1) return consts.CHIP0;
-        else return consts.CHIP1;
+        if(turn == 1) return Consts.CHIP0;
+        else return Consts.CHIP1;
     }
 
     private void showStartMsg(){
         System.out.println("새 게임을 시작합니다.");
-        System.out.println("Player 0: " + consts.CHIP0);
-        System.out.println("Player 1: " + consts.CHIP1);
+        System.out.println("Player 0: " + Consts.CHIP0);
+        System.out.println("Player 1: " + Consts.CHIP1);
         System.out.print("\n\n\n");
     }
 
@@ -64,14 +64,14 @@ public class Game{
     private int getUserInput() throws WrongInputException, InputMismatchException{
         System.out.print("몇 번째 열에 놓으시겠습니까? ");
         int pos = sc.nextInt() - 1;
-        if(!(0 <= pos && pos < consts.MAXCOL)) throw new WrongInputException(0);
+        if(!(0 <= pos && pos < Consts.MAXCOL)) throw new WrongInputException(0);
         // else if(this.board.isFull(pos)) throw new WrongInputException(1);
         return pos;
     }
 
     private boolean checkCol(int row, int col, char t){
         int cr, cl;
-        for(cr = col + 1; cr < consts.MAXCOL; cr++){
+        for(cr = col + 1; cr < Consts.MAXCOL; cr++){
             if(board.get(row, cr) != t) break;
         }
         cr--;
@@ -84,7 +84,7 @@ public class Game{
 
     private boolean checkRow(int row, int col, char t){
         int rr, rl;
-        for(rr = row + 1; rr < consts.MAXROW; rr++){
+        for(rr = row + 1; rr < Consts.MAXROW; rr++){
             if(board.get(rr, col) != t) break;
         }
         rr--;
@@ -101,7 +101,7 @@ public class Game{
 
     private boolean checkUpperRight(int row, int col, char t){
         int ir, il;
-        for(ir = 1; row + ir < consts.MAXROW && col + ir < consts.MAXCOL; ir++){
+        for(ir = 1; row + ir < Consts.MAXROW && col + ir < Consts.MAXCOL; ir++){
             if(board.get(row + ir, col + ir) != t) break;
         }
         ir--;
@@ -114,11 +114,11 @@ public class Game{
 
     private boolean checkLowerRight(int row, int col, char t){
         int ir, il;
-        for(ir = 1; row + ir < consts.MAXROW && col - ir >= 0; ir++){
+        for(ir = 1; row + ir < Consts.MAXROW && col - ir >= 0; ir++){
             if(board.get(row + ir, col - ir) != t) break;
         }
         ir--;
-        for(il = -1; row + il >= 0 && col - il < consts.MAXCOL; il--){
+        for(il = -1; row + il >= 0 && col - il < Consts.MAXCOL; il--){
             if(board.get(row + il, col - il) != t) break;
         }
         il++;
