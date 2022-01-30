@@ -106,6 +106,7 @@ public class Board{
 
     public boolean isFinished(int row, int col){
         char t = board[row][col].get();
+        if(t == Consts.BLANK) return false;
         return checkCol(row, col, t) || checkRow(row, col, t) || checkDiagonal(row, col, t);
     }
 
