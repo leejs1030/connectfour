@@ -7,7 +7,7 @@ public class Board{
 
     private class Cell{
         private char val;
-        public Cell(){this.val = '.';};
+        public Cell(){this.val = Consts.BLANK;};
         public Cell(char val){this.val = val;};
         public Cell(Cell c) { this.val = c.val; }
     
@@ -76,7 +76,7 @@ public class Board{
     public int getTop(int col){
         int r;
         for(r = Consts.MAXROW; r > 0; r--){
-            if(!this.board[r - 1][col].equals('.')) break;
+            if(!this.board[r - 1][col].equals(Consts.BLANK)) break;
         }
         return r;
     }
