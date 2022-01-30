@@ -5,7 +5,6 @@ import com.leejs1030.connectfour.datastructure.Board;
 import com.leejs1030.connectfour.myexception.WrongInputException;
 
 public class AI {
-    static final int INF = 0x7fffffff;
     Board original = null;
     public AI(Board b){ original = b; } // shallow copy.
 
@@ -20,7 +19,7 @@ public class AI {
     }
 
     private int selectColumn(){
-        int value = -INF, col = -1;
+        int value = -Consts.INF, col = -1;
         for(int i = 0; i < Consts.MAXCOL; i++){
             Board copy = new Board(this.original);
             try{
@@ -28,16 +27,58 @@ public class AI {
             } catch(WrongInputException e){
                 continue;
             }
-            int res = minimax(copy, 10, -INF, +INF, false);
+            int res = minimax(copy, i, Consts.MAXDEPTH, -Consts.INF, +Consts.INF, false);
             if(res > value){
                 value = res; col = i;
+            } else if(res == value){ // 같은 점수라면
+                if(Math.abs(Consts.MAXCOL / 2 - i) > Math.abs(Consts.MAXCOL / 2 - col)){ // 중앙에 놓는 것을 더 선호
+                    value = res; col = i;
+                }
             }
         }
         return col;
+        // minimax 에서 Pair를 써서 col까지 리턴하는 게 코드는 더 간편할 것.
+        // 조금 더 생각해보고 수정할지 말지 결정.
     }
     
-    private int minimax(Board node, int depth, int alpha, int beta, boolean isAITurn){
-        return 1;
+    private int minimax(Board node, int col, int depth, int alpha, int beta, boolean isAITurn){
+        if(node.isFinished(node.getTop(col) - 1, col)){
+            if(isAITurn) return Consts.INF;
+            else return -Consts.INF;
+        }
+
+        if(depth == 0){
+            return evaluate(node);
+        }
+        
+
+        if(isAITurn){ // 최대화 하기
+            for(int i = 0; i < Consts.MAXCOL; i++){
+                Board copy = new Board(this.original);
+                try{
+                    copy.insertChip(i, getChip(isAITurn));
+                } catch(WrongInputException e){
+                    continue;
+                }
+                int res = minimax(copy, i, depth - 1, alpha, beta, !isAITurn);
+                alpha = Math.max(alpha, res);
+                if(alpha >= beta) return alpha;
+            }
+            return alpha;
+        } else{ // 최소화 하기
+            for(int i = 0; i < Consts.MAXCOL; i++){
+                Board copy = new Board(this.original);
+                try{
+                    copy.insertChip(i, getChip(isAITurn));
+                } catch(WrongInputException e){
+                    continue;
+                }
+                int res = minimax(copy, i, depth - 1, alpha, beta, !isAITurn);
+                beta = Math.min(beta, res);
+                if(alpha >= beta) return beta;
+            }
+            return beta;
+        }
     }
 
     private int evaluate(Board b){ //주어진 보드의 점수를 리턴.
@@ -45,7 +86,12 @@ public class AI {
     }
 
     private char getChip(boolean isAITurn){
-        if(isAITurn) return 'O';
-        else return 'X';
+        if(getTurn(isAITurn) == 0) return Consts.CHIP0;
+        else return Consts.CHIP1;
+    }
+
+    private int getTurn(boolean isAITurn){
+        if(isAITurn) return Consts.AITURN;
+        else return Consts.AITURN ^ 1;
     }
 }
