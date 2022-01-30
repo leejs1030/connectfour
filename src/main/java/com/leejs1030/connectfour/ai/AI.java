@@ -9,9 +9,13 @@ public class AI {
     Board original = null;
     public AI(Board b){ original = b; } // shallow copy.
 
-    public int useTrun() throws WrongInputException{
+    public int useTurn(){
         int col = selectColumn();
+        try{
         original.insertChip(col, getChip(true)); // 에러 날 가능성 없음.
+        } catch(WrongInputException err){
+            System.out.println(err.getMessage());
+        }
         return col;
     }
 
