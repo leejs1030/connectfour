@@ -11,9 +11,9 @@ public class WrongInputExceptionTest {
         } catch(WrongInputException err){
             System.out.println("start");
             System.out.println(err);
-            // System.out.println(err.getMessage());
+            System.out.println(err.getMessage());
             System.out.println(err.toString());
-            System.out.println(err.getStackTrace());
+            err.printStackTrace();
             System.out.println("end");
         }
     }

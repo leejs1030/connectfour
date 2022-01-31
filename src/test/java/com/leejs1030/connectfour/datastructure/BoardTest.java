@@ -1,8 +1,11 @@
 package com.leejs1030.connectfour.datastructure;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
+import com.leejs1030.connectfour.consts.Consts;
 import com.leejs1030.connectfour.myexception.WrongInputException;
 
 import org.junit.Test;
@@ -66,5 +69,60 @@ public class BoardTest {
         assertEquals(b.getTop(6), 0);
         b.insertChip(6, 'A');
         assertEquals(b.getTop(6), 1);
+    }
+
+    @Test
+    public void isFinishedTest() throws WrongInputException{
+        Board b = new Board();
+        b.insertChip(0, Consts.CHIP0);
+        b.insertChip(0, Consts.CHIP0);
+        b.insertChip(0, Consts.CHIP0);
+        b.insertChip(0, Consts.CHIP0);
+        assertTrue(b.isFinished(0, 0));
+
+        b = new Board();
+        b.insertChip(0, Consts.CHIP0);
+        b.insertChip(1, Consts.CHIP0);
+        b.insertChip(2, Consts.CHIP0);
+        b.insertChip(3, Consts.CHIP0);
+        assertTrue(b.isFinished(0, 0));
+        assertTrue(b.isFinished(0, 1));
+        assertTrue(b.isFinished(0, 2));
+        assertTrue(b.isFinished(0, 3));
+        assertFalse(b.isFinished(0, 4));
+
+        b = new Board();
+        b.insertChip(0, Consts.CHIP0);
+        b.insertChip(1, Consts.CHIP1);
+        b.insertChip(1, Consts.CHIP0);
+        b.insertChip(2, Consts.CHIP1);
+        b.insertChip(2, Consts.CHIP1);
+        b.insertChip(2, Consts.CHIP0);
+        b.insertChip(3, Consts.CHIP1);
+        b.insertChip(3, Consts.CHIP1);
+        b.insertChip(3, Consts.CHIP1);
+        b.insertChip(3, Consts.CHIP0);
+        assertTrue(b.isFinished(0, 0));
+        assertTrue(b.isFinished(1, 1));
+        assertTrue(b.isFinished(2, 2));
+        assertTrue(b.isFinished(3, 3));
+        assertFalse(b.isFinished(0, 1));
+
+        b = new Board();
+        b.insertChip(3, Consts.CHIP0);
+        b.insertChip(2, Consts.CHIP1);
+        b.insertChip(2, Consts.CHIP0);
+        b.insertChip(1, Consts.CHIP1);
+        b.insertChip(1, Consts.CHIP1);
+        b.insertChip(1, Consts.CHIP0);
+        b.insertChip(0, Consts.CHIP1);
+        b.insertChip(0, Consts.CHIP1);
+        b.insertChip(0, Consts.CHIP1);
+        b.insertChip(0, Consts.CHIP0);
+        assertTrue(b.isFinished(3, 0));
+        assertTrue(b.isFinished(2, 1));
+        assertTrue(b.isFinished(1, 2));
+        assertTrue(b.isFinished(0, 3));
+        assertFalse(b.isFinished(0, 0));
     }
 }
