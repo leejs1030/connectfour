@@ -41,4 +41,11 @@ public class AITest {
         assertEquals(6, a.useTurn());
         b.showBoard();
     }
+
+    @Test
+    public void initialTest() throws WrongInputException{
+        Board b = new Board();
+        AI a = new AI(b);
+        a.useTurn();
+    }
 }
