@@ -20,7 +20,8 @@ public class AI {
 
     private int selectColumn(){
         int alpha = -Consts.INF, col = 0, beta = Consts.INF;
-        for(int i = 0; i < Consts.MAXCOL; i++){
+        for(int j = 0; j < Consts.MAXCOL; j++){
+            int i = Consts.insertOrder[j];
             Board copy = new Board(this.original);
             try{
                 copy.insertChip(i, getChip(true));
@@ -30,10 +31,6 @@ public class AI {
             int res = minimax(copy, i, Consts.MAXDEPTH - 1, alpha, beta, false);
             if(res > alpha){
                 alpha = res; col = i;
-            } else if(res == alpha){ // 같은 점수라면
-                if(Math.abs(Consts.MAXCOL / 2 - i) < Math.abs(Consts.MAXCOL / 2 - col)){ // 중앙에 놓는 것을 더 선호
-                    alpha = res; col = i;
-                }
             }
         }
         return col;
@@ -51,7 +48,8 @@ public class AI {
         }
 
         if(isAITurn){ // 최대화 하기
-            for(int i = 0; i < Consts.MAXCOL; i++){
+            for(int j = 0; j < Consts.MAXCOL; j++){
+                int i = Consts.insertOrder[j];
                 Board copy = new Board(node);
                 try{
                     copy.insertChip(i, getChip(isAITurn));
@@ -63,7 +61,8 @@ public class AI {
             }
             return alpha;
         } else{ // 최소화 하기
-            for(int i = 0; i < Consts.MAXCOL; i++){
+            for(int j = 0; j < Consts.MAXCOL; j++){
+                int i = Consts.insertOrder[j];
                 Board copy = new Board(node);
                 try{
                     copy.insertChip(i, getChip(isAITurn));

@@ -6,6 +6,7 @@ public interface Consts {
     int AITURN = 0; // 0:선공 1: 후공
     int MAXDEPTH = 9;
     int INF = 0x6fffffff;
+    int[] insertOrder = {3, 2, 4, 1, 5, 0, 6};
     
     
     int AI_ROW_TWO_SCORE = 3, AI_ROW_THREE_SCORE = 9;
