@@ -78,7 +78,120 @@ public class AI {
     }
 
     private int evaluate(Board b){ //주어진 보드의 점수를 리턴.
-        return 1;
+        int score = 0;
+        char ai = getChip(true), player = getChip(false);
+        int rowscore = evaluateRow(b, ai, player), colscore = evaluateCol(b, ai, player), diascore = evaluateDia(b, ai, player);
+        score = rowscore + colscore + diascore;
+        return score;
+    }
+
+    private int evaluateRow(Board b, char ai, char player){
+        int res = 0;
+        for(int r = 0; r < Consts.MAXROW; r++){
+            for(int c = 0; c < Consts.MAXCOL - 3; c++){
+                int ca = countRow(b, r, c, ai), cp = countRow(b, r, c, player);
+                if(ca == 0){
+                    if(cp == 2) res += Consts.PLAYER_ROW_TWO_SCORE;
+                    if(cp == 3) res += Consts.PLAYER_ROW_THREE_SCORE;
+                }
+                if(cp == 0){
+                    if(ca == 2) res += Consts.AI_ROW_TWO_SCORE;
+                    if(ca == 3) res += Consts.AI_ROW_THREE_SCORE;
+                }
+            }
+        }
+        return res;
+    }
+
+    private int countRow(Board b, int row, int col, char t){
+        int count = 0;
+        for(int i = 0; i < 4; i++){
+            if(b.get(row, col + i) == t) count++;
+        }
+        return count;
+    }
+
+    private int evaluateCol(Board b, char ai, char player){
+        int res = 0;
+        for(int r = 0; r < Consts.MAXROW - 3; r++){
+            for(int c = 0; c < Consts.MAXCOL; c++){
+                int ca = countCol(b, r, c, ai), cp = countCol(b, r, c, player);
+                if(ca == 0){
+                    if(cp == 2) res += Consts.PLAYER_COL_TWO_SCORE;
+                    if(cp == 3) res += Consts.PLAYER_COL_THREE_SCORE;
+                }
+                if(cp == 0){
+                    if(ca == 2) res += Consts.AI_COL_TWO_SCORE;
+                    if(ca == 3) res += Consts.AI_COL_THREE_SCORE;
+                }
+            }
+        }
+        return res;
+    }
+
+    private int countCol(Board b, int row, int col, char t){
+        int count = 0;
+        for(int i = 0; i < 4; i++){
+            if(b.get(row + i, col) == t) count++;
+        }
+        return count;
+    }
+
+    private int evaluateDia(Board b, char ai, char player){
+        int res = evaluateUpperRight(b, ai, player) + evaluateLowerRight(b, ai, player);
+        return res;
+    }
+
+    private int evaluateUpperRight(Board b, char ai, char player){
+        int res = 0;
+        for(int r = 0; r < Consts.MAXROW - 3; r++){
+            for(int c = 0; c < Consts.MAXCOL - 3; c++){
+                int ca = countUpperRight(b, r, c, ai), cp = countUpperRight(b, r, c, player);
+                if(ca == 0){
+                    if(cp == 2) res += Consts.PLAYER_DIA_TWO_SCORE;
+                    if(cp == 3) res += Consts.PLAYER_DIA_THREE_SCORE;
+                }
+                if(cp == 0){
+                    if(ca == 2) res += Consts.AI_DIA_TWO_SCORE;
+                    if(ca == 3) res += Consts.AI_DIA_THREE_SCORE;
+                }
+            }
+        }
+        return res;
+    }
+
+    private int countUpperRight(Board b, int row, int col, char t){
+        int count = 0;
+        for(int i = 0; i < 4; i++){
+            if(b.get(row + i, col + i) == t) count++;
+        }
+        return count;
+    }
+
+    private int evaluateLowerRight(Board b, char ai, char player){
+        int res = 0;
+        for(int r = 3; r < Consts.MAXROW; r++){
+            for(int c = 0; c < Consts.MAXCOL - 3; c++){
+                int ca = countLowerRight(b, r, c, ai), cp = countLowerRight(b, r, c, player);
+                if(ca == 0){
+                    if(cp == 2) res += Consts.PLAYER_DIA_TWO_SCORE;
+                    if(cp == 3) res += Consts.PLAYER_DIA_THREE_SCORE;
+                }
+                if(cp == 0){
+                    if(ca == 2) res += Consts.AI_DIA_TWO_SCORE;
+                    if(ca == 3) res += Consts.AI_DIA_THREE_SCORE;
+                }
+            }
+        }
+        return res;
+    }
+
+    private int countLowerRight(Board b, int row, int col, char t){
+        int count = 0;
+        for(int i = 0; i < 4; i++){
+            if(b.get(row - i, col + i) == t) count++;
+        }
+        return count;
     }
 
     private char getChip(boolean isAITurn){
