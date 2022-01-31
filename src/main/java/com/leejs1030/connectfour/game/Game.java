@@ -52,7 +52,7 @@ public class Game{
     private void changeTurn(){ turn ^= 1; }
 
     private char getChip(){
-        if(turn == 1) return Consts.CHIP0;
+        if(turn == 0) return Consts.CHIP0;
         else return Consts.CHIP1;
     }
 
