@@ -83,7 +83,7 @@ public class Board{
 
     public int insertChip(int col, char val) throws WrongInputException {
         int r = getTop(col);
-        if(r == Consts.MAXCOL) throw new WrongInputException(1);
+        if(r == Consts.MAXROW) throw new WrongInputException(1);
         this.board[r][col].set(val);
         return r;
     }
