@@ -46,6 +46,6 @@ public class AITest {
     public void initialTest() throws WrongInputException{
         Board b = new Board();
         AI a = new AI(b);
-        a.useTurn();
+        assertEquals(3, a.useTurn());
     }
 }
