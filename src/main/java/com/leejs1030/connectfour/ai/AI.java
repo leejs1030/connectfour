@@ -19,7 +19,7 @@ public class AI {
     }
 
     private int selectColumn(){
-        int value = -Consts.INF, col = 0;
+        int alpha = -Consts.INF, col = 0, beta = Consts.INF;
         for(int i = 0; i < Consts.MAXCOL; i++){
             Board copy = new Board(this.original);
             try{
@@ -27,12 +27,12 @@ public class AI {
             } catch(WrongInputException e){
                 continue;
             }
-            int res = minimax(copy, i, Consts.MAXDEPTH - 1, -Consts.INF, +Consts.INF, false);
-            if(res > value){
-                value = res; col = i;
-            } else if(res == value){ // 같은 점수라면
+            int res = minimax(copy, i, Consts.MAXDEPTH - 1, alpha, beta, false);
+            if(res > alpha){
+                alpha = res; col = i;
+            } else if(res == alpha){ // 같은 점수라면
                 if(Math.abs(Consts.MAXCOL / 2 - i) < Math.abs(Consts.MAXCOL / 2 - col)){ // 중앙에 놓는 것을 더 선호
-                    value = res; col = i;
+                    alpha = res; col = i;
                 }
             }
         }
