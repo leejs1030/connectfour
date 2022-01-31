@@ -44,8 +44,8 @@ public class AI {
     
     private int minimax(Board node, int col, int depth, int alpha, int beta, boolean isAITurn){
         if(node.isFinished(node.getTop(col) - 1, col)){
-            if(isAITurn) return -Consts.INF;
-            else return Consts.INF;
+            if(isAITurn) return -Consts.INF + Consts.MAXDEPTH - depth; // 늦게 지기 선택
+            else return Consts.INF - Consts.MAXDEPTH + depth; // 빨리 이기기 선택
         } else if(depth == 0){
             return evaluate(node);
         }
