@@ -28,6 +28,7 @@ public class Game{
             if(this.board.isFinished(this.board.getTop(col) - 1, col)) winner = this.turn;
             changeTurn();
         }
+        board.showBoard();
         return winner;
     }
 
@@ -46,6 +47,7 @@ public class Game{
             }
             changeTurn();
         }
+        board.showBoard();
         return winner;
     }
 
