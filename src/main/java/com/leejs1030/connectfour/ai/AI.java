@@ -22,13 +22,13 @@ public class AI {
         int alpha = -Consts.INF, col = 0, beta = Consts.INF;
         for(int j = 0; j < Consts.MAXCOL; j++){
             int i = Consts.insertOrder[j];
-            Board copy = new Board(this.original);
             try{
-                copy.insertChip(i, getChip(true));
+                original.insertChip(i, getChip(true));
             } catch(WrongInputException e){
                 continue;
             }
-            int res = minimax(copy, i, Consts.MAXDEPTH - 1, alpha, beta, false);
+            int res = minimax(original, i, Consts.MAXDEPTH - 1, alpha, beta, false);
+            original.undo();
             if(res > alpha){
                 alpha = res; col = i;
             }
@@ -50,26 +50,26 @@ public class AI {
         if(isAITurn){ // 최대화 하기
             for(int j = 0; j < Consts.MAXCOL; j++){
                 int i = Consts.insertOrder[j];
-                Board copy = new Board(node);
                 try{
-                    copy.insertChip(i, getChip(isAITurn));
+                    original.insertChip(i, getChip(isAITurn));
                 } catch(WrongInputException e){
                     continue;
                 }
-                alpha = Math.max(alpha, minimax(copy, i, depth - 1, alpha, beta, !isAITurn));
+                alpha = Math.max(alpha, minimax(original, i, depth - 1, alpha, beta, !isAITurn));
+                original.undo();
                 if(alpha >= beta) return alpha;
             }
             return alpha;
         } else{ // 최소화 하기
             for(int j = 0; j < Consts.MAXCOL; j++){
                 int i = Consts.insertOrder[j];
-                Board copy = new Board(node);
                 try{
-                    copy.insertChip(i, getChip(isAITurn));
+                    original.insertChip(i, getChip(isAITurn));
                 } catch(WrongInputException e){
                     continue;
                 }
-                beta = Math.min(beta, minimax(copy, i, depth - 1, alpha, beta, !isAITurn));
+                beta = Math.min(beta, minimax(original, i, depth - 1, alpha, beta, !isAITurn));
+                original.undo();
                 if(alpha >= beta) return beta;
             }
             return beta;
