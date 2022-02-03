@@ -38,7 +38,7 @@ public class Board{
     
     private char[][] board;
 
-    Stack<Integer> moveHistory;
+    Stack<Integer> moveHistory = new Stack<Integer>();
 
     public Board(){
         this.board = new char[Consts.MAXROW][Consts.MAXCOL];
