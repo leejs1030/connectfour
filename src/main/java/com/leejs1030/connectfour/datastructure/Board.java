@@ -1,5 +1,7 @@
 package com.leejs1030.connectfour.datastructure;
 
+import java.util.Stack;
+
 import com.leejs1030.connectfour.consts.Consts;
 import com.leejs1030.connectfour.myexception.WrongInputException;
 
@@ -35,6 +37,8 @@ public class Board{
     // private Cell[][] board;
     
     private char[][] board;
+
+    Stack<Integer> moveHistory = new Stack<Integer>();
 
     public Board(){
         this.board = new char[Consts.MAXROW][Consts.MAXCOL];
@@ -87,7 +91,19 @@ public class Board{
         int r = getTop(col);
         if(r == Consts.MAXROW) throw new WrongInputException(1);
         this.board[r][col] = val;
+        moveHistory.push(col);
         return r;
+    }
+
+    public int undo(){
+        int col = moveHistory.pop();
+        popChip(col);
+        return col;
+    }
+
+    private void popChip(int col){
+        int r = getTop(col) - 1;
+        this.board[r][col] = Consts.BLANK;
     }
 
     @Override
