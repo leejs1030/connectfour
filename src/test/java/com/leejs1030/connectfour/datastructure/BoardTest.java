@@ -125,4 +125,42 @@ public class BoardTest {
         assertTrue(b.isFinished(0, 3));
         assertFalse(b.isFinished(0, 0));
     }
+
+    @Test
+    public void undoTest() throws WrongInputException{
+        Board b = new Board();
+        System.out.println("start");
+        b.insertChip(0, 'A');
+        b.insertChip(1, 'B');
+        b.insertChip(0, 'C');
+        b.insertChip(1, 'D');
+        b.insertChip(1, 'E');
+        assertEquals(b.get(0, 0), 'A');
+        assertEquals(b.get(1, 0), 'C');
+        assertEquals(b.get(0, 1), 'B');
+        b.showBoard();
+        System.out.println("end");
+        Board b1 = new Board();
+        Board t = new Board();
+        b1.insertChip(0, 'O');
+        b1.insertChip(0, 'X');
+        b1.insertChip(1, 'O');
+        b1.insertChip(3, 'X');
+        assertEquals(b1, b1);
+        t.insertChip(0, 'O');
+        t.insertChip(0, 'X');
+        t.insertChip(1, 'O');
+        t.insertChip(3, 'X');
+        assertEquals(b1, t);
+        t.insertChip(2, 'O');
+        assertNotEquals(b1, t);
+
+        assertEquals(2, t.undo());
+        assertEquals(b1, t);
+        assertEquals(3, t.undo());
+        assertEquals(1, t.undo());
+        assertEquals(0, t.undo());
+        assertEquals(0, t.undo());
+        assertEquals(new Board(), t);
+    }
 }
