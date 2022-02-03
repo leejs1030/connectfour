@@ -95,9 +95,10 @@ public class Board{
         return r;
     }
 
-    public void undo(){
+    public int undo(){
         int col = moveHistory.pop();
         popChip(col);
+        return col;
     }
 
     private void popChip(int col){
