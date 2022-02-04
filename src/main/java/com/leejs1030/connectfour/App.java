@@ -3,9 +3,9 @@ package com.leejs1030.connectfour;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.leejs1030.connectfour.consts.Consts;
+import javax.swing.SwingUtilities;
+
 import com.leejs1030.connectfour.game.GUI;
-import com.leejs1030.connectfour.game.Game;
 
 public class App 
 {
@@ -13,6 +13,7 @@ public class App
     public static void main( String[] args )
     {
         GUI gui = new GUI();
+        gui.show();
         // Game game = new Game();
         // showStartMsg();
         // int ans = getInput();

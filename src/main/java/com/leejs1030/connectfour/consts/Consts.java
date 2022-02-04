@@ -8,6 +8,8 @@ public interface Consts {
     int MAXROW = 6, MAXCOL = 7;
     char CHIP0 = 'O', CHIP1 = 'X', BLANK = '.';
     Color CHIP0_COLOR = Color.RED, CHIP1_COLOR = Color.YELLOW, BLANK_COLOR = Color.WHITE;
+    Color CONTROL_COLOR = null;
+    Color[] text_colors = {CHIP0_COLOR, CHIP1_COLOR.darker()};
     int AITURN = 0; // 0:선공 1: 후공
     int MAXDEPTH = 9;
     int INF = 0x6fffffff;

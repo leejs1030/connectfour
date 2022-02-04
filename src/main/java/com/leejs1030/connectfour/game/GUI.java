@@ -2,6 +2,8 @@ package com.leejs1030.connectfour.game;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.InvocationTargetException;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.*;
@@ -21,17 +23,19 @@ public class GUI extends Game implements ActionListener{
     private int mode = 2; // 1: vs person       2: vs ai
     private boolean isDraw = false;
     AI player0;
+    JFrame frame;
 
     public GUI(){
         super();
         newGame();
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setBounds(0, 0, 600, 600);
         frame.setLayout(new BorderLayout());
         
         JPanel controPanel = new JPanel();
         
         controPanel.setLayout(new FlowLayout());
+        controPanel.setBackground(Consts.CONTROL_COLOR);
         newGame1.addActionListener(this); newGame2.addActionListener(this);
         controPanel.add(newGame1); controPanel.add(newGame2); controPanel.add(player);
 
@@ -47,10 +51,12 @@ public class GUI extends Game implements ActionListener{
 
         frame.add(controPanel, BorderLayout.NORTH);
         frame.add(boardPanel, BorderLayout.CENTER);
+    }
+
+    public void show(){
         frame.setVisible(true);
         playWithAI();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        
     }
 
     @Override
@@ -75,7 +81,6 @@ public class GUI extends Game implements ActionListener{
         showBoard();
         showTurn();
         mode = 2;
-        board.showBoard();
         player0 = new AI(board);
         int col = player0.useTurn();
         int row = board.getTop(col) - 1;
@@ -102,6 +107,8 @@ public class GUI extends Game implements ActionListener{
                 System.out.println((row + 1) + "열" + (col + 1) + "행");
                 if(board.isFinished(row, col)) winner = turn;
                 else if(board.isFull()) isDraw = true;
+                changeTurn();
+                showTurn();
             }
             else if(mode == 2){ // ai와 게임
                 if(turn != Consts.AITURN){
@@ -113,21 +120,24 @@ public class GUI extends Game implements ActionListener{
                     System.out.println((row + 1) + "열" + (col + 1) + "행");
                     if(board.isFinished(row, col)) winner = turn;
                     else if(board.isFull()) isDraw = true;
-                    else{ // 게임이 안 끝났으면
+                    else{
                         changeTurn(); // AI의 차례
                         showTurn();
-                        board.showBoard();
-                        col = player0.useTurn();
-                        row = board.getTop(col) - 1;
-                        slots[row][col].setColor(getChip());
-                        System.out.println("AI의 수: " + (row + 1) + "열" + (col + 1) + "행\n\n");
-                        if(board.isFinished(row, col)) winner = turn;
-                        else if(board.isFull()) isDraw = true;
+                        SwingUtilities.invokeLater(new Runnable(){
+                            public void run(){
+                                int col = player0.useTurn();
+                                int row = board.getTop(col) - 1;
+                                slots[row][col].setColor(getChip());
+                                System.out.println("AI의 수: " + (row + 1) + "열" + (col + 1) + "행\n\n");
+                                if(board.isFinished(row, col)) winner = turn;
+                                else if(board.isFull()) isDraw = true;
+                                changeTurn();
+                                showTurn();
+                            }
+                        });
                     }
                 }
             }
-            changeTurn();
-            showTurn();
         }
     }
 
@@ -144,8 +154,14 @@ public class GUI extends Game implements ActionListener{
     @Override
     public void showTurn(){
         if(isDraw) player.setText("Draw!");
-        else if(winner < 0) player.setText("Player " + turn + "'s turn!");
-        else player.setText("Player " + winner + "win!");
+        else if(winner < 0){
+            player.setText("Player " + turn + "'s turn!");
+            player.setForeground(Consts.text_colors[turn]);
+        }
+        else{
+            player.setText("Player " + winner + "win!");
+            player.setForeground(Consts.text_colors[winner]);
+        }
     }
 }
 
