@@ -9,18 +9,24 @@ import com.leejs1030.connectfour.datastructure.Board;
 import com.leejs1030.connectfour.myexception.WrongInputException;
 
 public class Game{
-    private Board board;
-    private int turn;
+    protected Board board;
+    protected int turn;
+    protected int winner = -1;
     static Scanner sc = new Scanner(System.in);
 
     public Game(){
-        this.board = new Board();
-        this.turn = 0;
+        newGame();
+    }
+
+    public void newGame(){
+        board = new Board();
+        turn = 0;
+        winner = -1;
     }
 
     public int playGame(){
+        newGame();
         showStartMsg();
-        int winner = -1;
         while(winner < 0){
             board.showBoard();
             showTurn();
@@ -33,8 +39,8 @@ public class Game{
     }
 
     public int playWithAI(){
+        newGame();
         AI player0 = new AI(this.board);
-        int winner = -1;
         while(winner < 0){
             board.showBoard();
             showTurn();
@@ -51,23 +57,23 @@ public class Game{
         return winner;
     }
 
-    private void changeTurn(){ turn ^= 1; }
+    protected void changeTurn(){ turn ^= 1; }
 
-    private char getChip(){
+    protected char getChip(){
         if(turn == 0) return Consts.CHIP0;
         else return Consts.CHIP1;
     }
 
-    private void showStartMsg(){
+    protected void showStartMsg(){
         System.out.println("새 게임을 시작합니다.");
         System.out.println("Player 0: " + Consts.CHIP0);
         System.out.println("Player 1: " + Consts.CHIP1);
         System.out.print("\n\n\n");
     }
 
-    private void showTurn(){ System.out.println("Player " + turn + " (" + getChip() + ")의 차례 입니다!"); }
+    protected void showTurn(){ System.out.println("Player " + turn + " (" + getChip() + ")의 차례 입니다!"); }
 
-    private int useTurn(){
+    protected int useTurn(){
         while(true){
             try{
                 int col = getUserInput();
@@ -82,7 +88,12 @@ public class Game{
         }
     }
 
-    private int getUserInput() throws WrongInputException, InputMismatchException{
+    public int useTurn(int col) throws WrongInputException{
+        this.board.insertChip(col, getChip());
+        return col;
+    }
+
+    protected int getUserInput() throws WrongInputException, InputMismatchException{
         System.out.print("몇 번째 열에 놓으시겠습니까? ");
         int pos = sc.nextInt() - 1;
         if(!(0 <= pos && pos < Consts.MAXCOL)) throw new WrongInputException(0);
