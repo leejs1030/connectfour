@@ -124,6 +124,14 @@ public class Board{
         return checkCol(row, col, t) || checkRow(row, col, t) || checkDiagonal(row, col, t);
     }
 
+    public boolean isFull(){
+        char t = Consts.BLANK;
+        for(int i = 0; i < Consts.MAXCOL; i++){
+            if(board[Consts.MAXROW - 1][i] == t) return false;
+        }
+        return true;
+    }
+
     private boolean checkCol(int row, int col, char t){
         int cr, cl;
         for(cr = col + 1; cr < Consts.MAXCOL; cr++){
