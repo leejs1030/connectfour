@@ -163,4 +163,15 @@ public class BoardTest {
         assertEquals(0, t.undo());
         assertEquals(new Board(), t);
     }
+
+    @Test
+    public void fullTest() throws WrongInputException{
+        Board b = new Board();
+        for(int i = 0; i < Consts.MAXROW; i++){
+            for(int j = 0; j < Consts.MAXCOL; j++){
+                b.insertChip(j, Consts.CHIP0);
+            }
+        }
+        assertTrue(b.isFull());
+    }
 }
