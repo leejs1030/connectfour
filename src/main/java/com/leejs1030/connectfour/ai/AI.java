@@ -43,7 +43,12 @@ public class AI {
         if(node.isFinished(node.getTop(col) - 1, col)){
             if(isAITurn) return -Consts.INF + Consts.MAXDEPTH - depth; // 늦게 지기 선택
             else return Consts.INF - Consts.MAXDEPTH + depth; // 빨리 이기기 선택
-        } else if(depth == 0){
+        }
+        else if(node.isFull()){
+            System.out.println("Full");
+            return 0;
+        }
+        else if(depth == 0){
             return evaluate(node);
         }
 
