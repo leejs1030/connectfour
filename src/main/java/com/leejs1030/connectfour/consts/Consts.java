@@ -2,8 +2,6 @@ package com.leejs1030.connectfour.consts;
 
 import java.awt.Color;
 
-import com.leejs1030.connectfour.game.Game;
-
 public interface Consts {
     int MAXROW = 6, MAXCOL = 7;
     char CHIP0 = 'O', CHIP1 = 'X', BLANK = '.';
