@@ -6,7 +6,7 @@
 
   <groupId>com.leejs1030.connectfour</groupId>
   <artifactId>connectfour</artifactId>
-  <version>3.0.0</version>
+  <version>3.1.0</version>
 
   <name>connectfour</name>
   <!-- FIXME change it to the project's website -->
