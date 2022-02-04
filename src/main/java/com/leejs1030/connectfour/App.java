@@ -3,6 +3,8 @@ package com.leejs1030.connectfour;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import com.leejs1030.connectfour.consts.Consts;
+import com.leejs1030.connectfour.game.GUI;
 import com.leejs1030.connectfour.game.Game;
 
 public class App 
@@ -10,16 +12,17 @@ public class App
     public static Scanner sc = new Scanner(System.in);
     public static void main( String[] args )
     {
-        Game game = new Game();
-        showStartMsg();
-        int ans = getInput();
-        int winner = -1;
-        if(ans == 1){
-            winner = game.playGame();
-        } else if(ans == 2){
-            winner = game.playWithAI();
-        }
-        System.out.println("Player " + winner + "의 승리!");
+        GUI gui = new GUI();
+        // Game game = new Game();
+        // showStartMsg();
+        // int ans = getInput();
+        // int winner = -1;
+        // if(ans == 1){
+        //     winner = game.playGame();
+        // } else if(ans == 2){
+        //     winner = game.playWithAI();
+        // }
+        // System.out.println("Player " + winner + "의 승리!");
     }
 
     public static void showStartMsg(){
