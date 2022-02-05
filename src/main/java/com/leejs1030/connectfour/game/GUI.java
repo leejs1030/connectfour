@@ -82,12 +82,14 @@ public class GUI extends Game implements ActionListener{
         showTurn();
         mode = 2;
         player0 = new AI(board);
-        int col = player0.useTurn();
-        int row = board.getTop(col) - 1;
-        slots[row][col].setColor(getChip());
-        if(board.isFinished(row, col)) winner = turn;
-        changeTurn();
-        showTurn();
+        if(Consts.AITURN == 0){    
+            int col = player0.useTurn();
+            int row = board.getTop(col) - 1;
+            slots[row][col].setColor(getChip());
+            if(board.isFinished(row, col)) winner = turn;
+            changeTurn();
+            showTurn();
+        }
         return mode;
     }
     
