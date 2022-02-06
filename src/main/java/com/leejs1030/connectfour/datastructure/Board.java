@@ -36,17 +36,17 @@ public class Board{
     
     // private Cell[][] board;
     
-    private char[][] board;
+    private int[][] board;
 
     Stack<Integer> moveHistory = new Stack<Integer>();
 
     public Board(){
-        this.board = new char[Consts.MAXROW][Consts.MAXCOL];
+        this.board = new int[Consts.MAXROW][Consts.MAXCOL];
         initializeBoard();
     }
 
     public Board(Board b){
-        this.board = new char[Consts.MAXROW][Consts.MAXCOL];
+        this.board = new int[Consts.MAXROW][Consts.MAXCOL];
         for(int i = 0; i < Consts.MAXROW; i++){
             for(int j = 0; j < Consts.MAXCOL; j++){
                 this.board[i][j] = b.board[i][j];
@@ -66,7 +66,7 @@ public class Board{
         for(int i = Consts.MAXROW - 1; i >= 0; i--){
             System.out.print((i + 1) + " ");
             for(int j = 0; j < Consts.MAXCOL; j++){
-                System.out.print(board[i][j] + " ");
+                System.out.print(Consts.CHIPS[board[i][j]] + " ");
             }
             System.out.println();
         }
@@ -75,7 +75,7 @@ public class Board{
         System.out.println();
     }
 
-    public char get(int row, int col){
+    public int get(int row, int col){
         return this.board[row][col];
     }
 
@@ -87,7 +87,7 @@ public class Board{
         return r;
     }
 
-    public int insertChip(int col, char val) throws WrongInputException {
+    public int insertChip(int col, int val) throws WrongInputException {
         int r = getTop(col);
         if(r == Consts.MAXROW) throw new WrongInputException(1);
         this.board[r][col] = val;
@@ -119,20 +119,20 @@ public class Board{
 
 
     public boolean isFinished(int row, int col){
-        char t = board[row][col];
+        int t = board[row][col];
         if(t == Consts.BLANK) return false;
         return checkCol(row, col, t) || checkRow(row, col, t) || checkDiagonal(row, col, t);
     }
 
     public boolean isFull(){
-        char t = Consts.BLANK;
+        int t = Consts.BLANK;
         for(int i = 0; i < Consts.MAXCOL; i++){
             if(board[Consts.MAXROW - 1][i] == t) return false;
         }
         return true;
     }
 
-    private boolean checkCol(int row, int col, char t){
+    private boolean checkCol(int row, int col, int t){
         int cr, cl;
         for(cr = col + 1; cr < Consts.MAXCOL; cr++){
             if(board[row][cr] != t) break;
@@ -145,7 +145,7 @@ public class Board{
         return (cr - cl + 1 >= 4);
     }
 
-    private boolean checkRow(int row, int col, char t){
+    private boolean checkRow(int row, int col, int t){
         int rr, rl;
         for(rr = row + 1; rr < Consts.MAXROW; rr++){
             if(board[rr][col] != t) break;
@@ -158,11 +158,11 @@ public class Board{
         return (rr - rl + 1 >= 4);
     }
 
-    private boolean checkDiagonal(int row, int col, char t){
+    private boolean checkDiagonal(int row, int col, int t){
         return checkUpperRight(row, col, t) || checkLowerRight(row, col, t);
     }
 
-    private boolean checkUpperRight(int row, int col, char t){
+    private boolean checkUpperRight(int row, int col, int t){
         int ir, il;
         for(ir = 1; row + ir < Consts.MAXROW && col + ir < Consts.MAXCOL; ir++){
             if(board[row + ir][col + ir] != t) break;
@@ -175,7 +175,7 @@ public class Board{
         return (ir - il + 1 >= 4);
     }
 
-    private boolean checkLowerRight(int row, int col, char t){
+    private boolean checkLowerRight(int row, int col, int t){
         int ir, il;
         for(ir = 1; row + ir < Consts.MAXROW && col - ir >= 0; ir++){
             if(board[row + ir][col - ir] != t) break;

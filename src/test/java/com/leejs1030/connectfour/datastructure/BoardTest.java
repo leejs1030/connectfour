@@ -15,29 +15,28 @@ public class BoardTest {
     public void insertChipTest() throws WrongInputException{
         Board b = new Board();
         System.out.println("start");
-        b.insertChip(0, 'A');
-        b.insertChip(1, 'B');
-        b.insertChip(0, 'C');
-        b.insertChip(1, 'D');
-        b.insertChip(1, 'E');
-        assertEquals(b.get(0, 0), 'A');
-        assertEquals(b.get(1, 0), 'C');
-        assertEquals(b.get(0, 1), 'B');
-        b.showBoard();
+        b.insertChip(0, 1);
+        b.insertChip(1, 1);
+        b.insertChip(0, 0);
+        b.insertChip(1, 1);
+        b.insertChip(1, 0);
+        assertEquals(b.get(0, 0), 1);
+        assertEquals(b.get(1, 0), 0);
+        assertEquals(b.get(0, 1), 1);
         System.out.println("end");
         Board b1 = new Board();
         Board t = new Board();
-        b1.insertChip(0, 'O');
-        b1.insertChip(0, 'X');
-        b1.insertChip(1, 'O');
-        b1.insertChip(3, 'X');
+        b1.insertChip(0, 0);
+        b1.insertChip(0, 1);
+        b1.insertChip(1, 0);
+        b1.insertChip(3, 1);
         assertEquals(b1, b1);
-        t.insertChip(0, 'O');
-        t.insertChip(0, 'X');
-        t.insertChip(1, 'O');
-        t.insertChip(3, 'X');
+        t.insertChip(0, 0);
+        t.insertChip(0, 1);
+        t.insertChip(1, 0);
+        t.insertChip(3, 1);
         assertEquals(b1, t);
-        t.insertChip(2, 'O');
+        t.insertChip(2, 0);
         assertNotEquals(b1, t);
     }
 
@@ -138,7 +137,6 @@ public class BoardTest {
         assertEquals(b.get(0, 0), 'A');
         assertEquals(b.get(1, 0), 'C');
         assertEquals(b.get(0, 1), 'B');
-        b.showBoard();
         System.out.println("end");
         Board b1 = new Board();
         Board t = new Board();
