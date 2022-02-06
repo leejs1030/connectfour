@@ -6,8 +6,6 @@ import com.leejs1030.connectfour.myexception.WrongInputException;
 
 public class AI {
     Board original = null;
-    final int AI_TURN = getTurn(true), PLAYER_TURN = getTurn(false);
-    final char AI_CHIP = getChip(true), PLAYER_CHIP = getChip(false);
     public AI(Board b){ original = b; } // shallow copy.
 
     public int useTurn(){
@@ -86,346 +84,118 @@ public class AI {
     private int evaluate(Board b){ //주어진 보드의 점수를 리턴.
         int score = 0;
         char ai = getChip(true), player = getChip(false);
-        int rowscore = rowLoop(b, ai, player), colscore = colLoop(b, ai, player), diascore = diaLoop(b, ai, player);
+        int rowscore = evaluateRow(b, ai, player), colscore = evaluateCol(b, ai, player), diascore = evaluateDia(b, ai, player);
         score = rowscore + colscore + diascore;
         return score;
     }
 
-    private int rowLoop(Board b, char ai, char player){
+    private int evaluateRow(Board b, char ai, char player){
         int res = 0;
         for(int r = 0; r < Consts.MAXROW; r++){
             for(int c = 0; c < Consts.MAXCOL - 3; c++){
-                res += evaluateRowAI(b, r, c);
-                res += evaluateRowPlayer(b, r, c);
+                int ca = countRow(b, r, c, ai), cp = countRow(b, r, c, player);
+                if(ca == 0){
+                    if(cp == 2) res += Consts.PLAYER_ROW_TWO_SCORE;
+                    if(cp == 3) res += Consts.PLAYER_ROW_THREE_SCORE;
+                }
+                if(cp == 0){
+                    if(ca == 2) res += Consts.AI_ROW_TWO_SCORE;
+                    if(ca == 3) res += Consts.AI_ROW_THREE_SCORE;
+                }
             }
         }
         return res;
     }
 
-    private int evaluateRowAI(Board b, int row, int col){
-        int aicount = 0, aigoodblank = 0;
+    private int countRow(Board b, int row, int col, char t){
+        int count = 0;
         for(int i = 0; i < 4; i++){
-            char cur = b.get(row, col + i);
-            if(cur != Consts.BLANK){
-                if(cur == AI_CHIP){
-                    aicount++;
-                } else if(cur == PLAYER_CHIP){
-                    return 0;
-                }
-            } else{
-                if(((row - b.getTop(col + i) - Consts.MAXDEPTH) & 1) == 0){
-                    aigoodblank++;
-                }
-            }
+            if(b.get(row, col + i) == t) count++;
         }
-        int res = 0;
-        if(aicount == 3){
-            if(aigoodblank == 1){
-                res = Consts.AI_GOOD_THREE;
-            } else {
-                res = Consts.AI_BAD_THREE;
-            }
-        } else if(aicount == 2){
-            if(aigoodblank == 2){
-                res = Consts.AI_GOOD_TWO;
-            } else if(aigoodblank == 1){
-                res = Consts.AI_TWO;
-            }
-            else{
-                res = Consts.AI_BAD_TWO;
-            }
-        }
-        return res;
+        return count;
     }
 
-    private int evaluateRowPlayer(Board b, int row, int col){
-        int playercount = 0, playergoodblank = 0;
-        for(int i = 0; i < 4; i++){
-            char cur = b.get(row, col + i);
-            if(cur != Consts.BLANK){
-                if(cur == PLAYER_CHIP){
-                    playercount++;
-                } else if(cur == PLAYER_CHIP){
-                    return 0;
-                }
-            } else{
-                if(((row - b.getTop(col + i) - Consts.MAXDEPTH) & 1) == 1){
-                    playergoodblank++;
-                }
-            }
-        }
-        int res = 0;
-        if(playercount == 3){
-            if(playergoodblank == 1){
-                res = Consts.PLAYER_GOOD_THREE;
-            } else {
-                res = Consts.PLAYER_BAD_THREE;
-            }
-        } else if(playercount == 2){
-            if(playergoodblank == 2){
-                res = Consts.PLAYER_GOOD_TWO;
-            } else if(playergoodblank == 1){
-                res = Consts.PLAYER_TWO;
-            }
-            else{
-                res = Consts.PLAYER_BAD_TWO;
-            }
-        }
-        return res;
-    }
-
-    private int colLoop(Board b, char ai, char player){
+    private int evaluateCol(Board b, char ai, char player){
         int res = 0;
         for(int r = 0; r < Consts.MAXROW - 3; r++){
             for(int c = 0; c < Consts.MAXCOL; c++){
-                res += evaluateColAI(b, r, c);
-                res += evaluateColPlayer(b, r, c);
+                int ca = countCol(b, r, c, ai), cp = countCol(b, r, c, player);
+                if(ca == 0){
+                    if(cp == 2) res += Consts.PLAYER_COL_TWO_SCORE;
+                    if(cp == 3) res += Consts.PLAYER_COL_THREE_SCORE;
+                }
+                if(cp == 0){
+                    if(ca == 2) res += Consts.AI_COL_TWO_SCORE;
+                    if(ca == 3) res += Consts.AI_COL_THREE_SCORE;
+                }
             }
         }
         return res;
     }
 
-    private int evaluateColAI(Board b, int row, int col){
-        int aicount = 0, aigoodblank = 0;
+    private int countCol(Board b, int row, int col, char t){
+        int count = 0;
         for(int i = 0; i < 4; i++){
-            char cur = b.get(row + i, col);
-            if(cur != Consts.BLANK){
-                if(cur == AI_CHIP){
-                    aicount++;
-                } else if(cur == PLAYER_CHIP){
-                    return 0;
-                }
-            } else{
-                if(((row + i - b.getTop(col) - Consts.MAXDEPTH) & 1) == 0){
-                    aigoodblank++;
-                }
-            }
+            if(b.get(row + i, col) == t) count++;
         }
-        int res = 0;
-        if(aicount == 3){
-            if(aigoodblank == 1){
-                res = Consts.AI_GOOD_THREE;
-            } else {
-                res = Consts.AI_BAD_THREE;
-            }
-        } else if(aicount == 2){
-            if(aigoodblank == 2){
-                res = Consts.AI_GOOD_TWO;
-            } else if(aigoodblank == 1){
-                res = Consts.AI_TWO;
-            }
-            else{
-                res = Consts.AI_BAD_TWO;
-            }
-        }
+        return count;
+    }
+
+    private int evaluateDia(Board b, char ai, char player){
+        int res = evaluateUpperRight(b, ai, player) + evaluateLowerRight(b, ai, player);
         return res;
     }
 
-    private int evaluateColPlayer(Board b, int row, int col){
-        int playercount = 0, playergoodblank = 0;
-        for(int i = 0; i < 4; i++){
-            char cur = b.get(row + i, col);
-            if(cur != Consts.BLANK){
-                if(cur == PLAYER_CHIP){
-                    playercount++;
-                } else if(cur == PLAYER_CHIP){
-                    return 0;
-                }
-            } else{
-                if(((row + i - b.getTop(col) - Consts.MAXDEPTH) & 1) == 1){
-                    playergoodblank++;
-                }
-            }
-        }
-        int res = 0;
-        if(playercount == 3){
-            if(playergoodblank == 1){
-                res = Consts.PLAYER_GOOD_THREE;
-            } else {
-                res = Consts.PLAYER_BAD_THREE;
-            }
-        } else if(playercount == 2){
-            if(playergoodblank == 2){
-                res = Consts.PLAYER_GOOD_TWO;
-            } else if(playergoodblank == 1){
-                res = Consts.PLAYER_TWO;
-            }
-            else{
-                res = Consts.PLAYER_BAD_TWO;
-            }
-        }
-        return res;
-    }
-
-    private int diaLoop(Board b, char ai, char player){
-        int res = upperRightLoop(b, ai, player) + lowerRightLoop(b, ai, player);
-        return res;
-    }
-
-    private int upperRightLoop(Board b, char ai, char player){
+    private int evaluateUpperRight(Board b, char ai, char player){
         int res = 0;
         for(int r = 0; r < Consts.MAXROW - 3; r++){
             for(int c = 0; c < Consts.MAXCOL - 3; c++){
-                res += evaluateUpperRightAI(b, r, c);
-                res += evaluateUpperRightPlayer(b, r, c);
+                int ca = countUpperRight(b, r, c, ai), cp = countUpperRight(b, r, c, player);
+                if(ca == 0){
+                    if(cp == 2) res += Consts.PLAYER_DIA_TWO_SCORE;
+                    if(cp == 3) res += Consts.PLAYER_DIA_THREE_SCORE;
+                }
+                if(cp == 0){
+                    if(ca == 2) res += Consts.AI_DIA_TWO_SCORE;
+                    if(ca == 3) res += Consts.AI_DIA_THREE_SCORE;
+                }
             }
         }
         return res;
     }
 
-    private int evaluateUpperRightAI(Board b, int row, int col){
-        int aicount = 0, aigoodblank = 0;
+    private int countUpperRight(Board b, int row, int col, char t){
+        int count = 0;
         for(int i = 0; i < 4; i++){
-            char cur = b.get(row + i, col + i);
-            if(cur != Consts.BLANK){
-                if(cur == AI_CHIP){
-                    aicount++;
-                } else if(cur == PLAYER_CHIP){
-                    return 0;
-                }
-            } else{
-                if(((row + i - b.getTop(col + i) - Consts.MAXDEPTH) & 1) == 0){
-                    aigoodblank++;
-                }
-            }
+            if(b.get(row + i, col + i) == t) count++;
         }
-        int res = 0;
-        if(aicount == 3){
-            if(aigoodblank == 1){
-                res = Consts.AI_GOOD_THREE;
-            } else {
-                res = Consts.AI_BAD_THREE;
-            }
-        } else if(aicount == 2){
-            if(aigoodblank == 2){
-                res = Consts.AI_GOOD_TWO;
-            } else if(aigoodblank == 1){
-                res = Consts.AI_TWO;
-            }
-            else{
-                res = Consts.AI_BAD_TWO;
-            }
-        }
-        return res;
+        return count;
     }
 
-    private int evaluateUpperRightPlayer(Board b, int row, int col){
-        int playercount = 0, playergoodblank = 0;
-        for(int i = 0; i < 4; i++){
-            char cur = b.get(row + i, col + i);
-            if(cur != Consts.BLANK){
-                if(cur == PLAYER_CHIP){
-                    playercount++;
-                } else if(cur == PLAYER_CHIP){
-                    return 0;
-                }
-            } else{
-                if(((row + i - b.getTop(col + i) - Consts.MAXDEPTH) & 1) == 1){
-                    playergoodblank++;
-                }
-            }
-        }
-        int res = 0;
-        if(playercount == 3){
-            if(playergoodblank == 1){
-                res = Consts.PLAYER_GOOD_THREE;
-            } else {
-                res = Consts.PLAYER_BAD_THREE;
-            }
-        } else if(playercount == 2){
-            if(playergoodblank == 2){
-                res = Consts.PLAYER_GOOD_TWO;
-            } else if(playergoodblank == 1){
-                res = Consts.PLAYER_TWO;
-            }
-            else{
-                res = Consts.PLAYER_BAD_TWO;
-            }
-        }
-        return res;
-    }
-
-    private int lowerRightLoop(Board b, char ai, char player){
+    private int evaluateLowerRight(Board b, char ai, char player){
         int res = 0;
         for(int r = 3; r < Consts.MAXROW; r++){
             for(int c = 0; c < Consts.MAXCOL - 3; c++){
-                res += evaluateLowerRightAI(b, r, c);
-                res += evaluateLowerRightPlayer(b, r, c);
+                int ca = countLowerRight(b, r, c, ai), cp = countLowerRight(b, r, c, player);
+                if(ca == 0){
+                    if(cp == 2) res += Consts.PLAYER_DIA_TWO_SCORE;
+                    if(cp == 3) res += Consts.PLAYER_DIA_THREE_SCORE;
+                }
+                if(cp == 0){
+                    if(ca == 2) res += Consts.AI_DIA_TWO_SCORE;
+                    if(ca == 3) res += Consts.AI_DIA_THREE_SCORE;
+                }
             }
         }
         return res;
     }
 
-    private int evaluateLowerRightAI(Board b, int row, int col){
-        int aicount = 0, aigoodblank = 0;
+    private int countLowerRight(Board b, int row, int col, char t){
+        int count = 0;
         for(int i = 0; i < 4; i++){
-            char cur = b.get(row - i, col + i);
-            if(cur != Consts.BLANK){
-                if(cur == AI_CHIP){
-                    aicount++;
-                } else if(cur == PLAYER_CHIP){
-                    return 0;
-                }
-            } else{
-                if(((row - i - b.getTop(col + i) - Consts.MAXDEPTH) & 1) == 0){
-                    aigoodblank++;
-                }
-            }
+            if(b.get(row - i, col + i) == t) count++;
         }
-        int res = 0;
-        if(aicount == 3){
-            if(aigoodblank == 1){
-                res = Consts.AI_GOOD_THREE;
-            } else {
-                res = Consts.AI_BAD_THREE;
-            }
-        } else if(aicount == 2){
-            if(aigoodblank == 2){
-                res = Consts.AI_GOOD_TWO;
-            } else if(aigoodblank == 1){
-                res = Consts.AI_TWO;
-            }
-            else{
-                res = Consts.AI_BAD_TWO;
-            }
-        }
-        return res;
-    }
-
-    private int evaluateLowerRightPlayer(Board b, int row, int col){
-        int playercount = 0, playergoodblank = 0;
-        for(int i = 0; i < 4; i++){
-            char cur = b.get(row - i, col + i);
-            if(cur != Consts.BLANK){
-                if(cur == PLAYER_CHIP){
-                    playercount++;
-                } else if(cur == PLAYER_CHIP){
-                    return 0;
-                }
-            } else{
-                if(((row - i - b.getTop(col + i) - Consts.MAXDEPTH) & 1) == 1){
-                    playergoodblank++;
-                }
-            }
-        }
-        int res = 0;
-        if(playercount == 3){
-            if(playergoodblank == 1){
-                res = Consts.PLAYER_GOOD_THREE;
-            } else {
-                res = Consts.PLAYER_BAD_THREE;
-            }
-        } else if(playercount == 2){
-            if(playergoodblank == 2){
-                res = Consts.PLAYER_GOOD_TWO;
-            } else if(playergoodblank == 1){
-                res = Consts.PLAYER_TWO;
-            }
-            else{
-                res = Consts.PLAYER_BAD_TWO;
-            }
-        }
-        return res;
+        return count;
     }
 
     private char getChip(boolean isAITurn){
