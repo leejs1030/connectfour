@@ -2,11 +2,9 @@ package com.leejs1030.connectfour.game;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.event.*;
 
 import com.leejs1030.connectfour.ai.AI;
 import com.leejs1030.connectfour.consts.Consts;
