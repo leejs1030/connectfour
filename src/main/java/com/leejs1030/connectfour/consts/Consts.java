@@ -4,7 +4,9 @@ import java.awt.Color;
 
 public interface Consts {
     int MAXROW = 6, MAXCOL = 7;
-    char CHIP0 = 'O', CHIP1 = 'X', BLANK = '.';
+    // char CHIP0 = 'O', CHIP1 = 'X', BLANK = '.';
+    int CHIP0 = 0, CHIP1 = 1, BLANK = 2;
+    char[] CHIPS = {'O', 'X', '.'};
     Color CHIP0_COLOR = Color.RED, CHIP1_COLOR = Color.YELLOW, BLANK_COLOR = Color.WHITE;
     Color CONTROL_COLOR = null;
     Color[] text_colors = {CHIP0_COLOR, CHIP1_COLOR.darker()};

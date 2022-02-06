@@ -169,7 +169,7 @@ class Slot extends JButton{
         setColor(Consts.BLANK);
     }
 
-    public void setColor(char chip){
+    public void setColor(int chip){
         switch(chip){
         case Consts.BLANK:
             setBackground(Consts.BLANK_COLOR);

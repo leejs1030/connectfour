@@ -59,7 +59,7 @@ public class Game{
 
     protected void changeTurn(){ turn ^= 1; }
 
-    protected char getChip(){
+    protected int getChip(){
         if(turn == 0) return Consts.CHIP0;
         else return Consts.CHIP1;
     }
