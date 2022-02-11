@@ -101,6 +101,11 @@ public class Board{
         return col;
     }
 
+    public int getStackSize(){
+        System.out.println("stack size: " + moveHistory.size());
+        return moveHistory.size();
+    }
+
     private void popChip(int col){
         int r = getTop(col) - 1;
         this.board[r][col] = Consts.BLANK;

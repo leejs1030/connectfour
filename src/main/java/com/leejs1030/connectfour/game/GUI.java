@@ -14,13 +14,13 @@ import com.leejs1030.connectfour.myexception.WrongInputException;
 public class GUI extends Game implements ActionListener{
     Board board;
     private Slot[][] slots = new Slot[Consts.MAXROW][Consts.MAXCOL];
-    JButton newGame1 = new JButton("vs Player");
-    JButton newGame2 = new JButton("vs AI");
+    JButton undoBtn = new JButton("undo");
+    JButton newGame1Btn = new JButton("vs Player");
+    JButton newGame2Btn = new JButton("vs AI");
     JLabel player = new JLabel("Player 1's turn");
     private int winner = -1;
-    private boolean aimode = true; // true: play with ai        false: paly with person
     private boolean isDraw = false;
-    AI player0;
+    AI AIPlayer;
     JFrame frame;
 
     public GUI(){
@@ -30,12 +30,12 @@ public class GUI extends Game implements ActionListener{
         frame.setBounds(0, 0, 600, 600);
         frame.setLayout(new BorderLayout());
         
-        JPanel controPanel = new JPanel();
+        JPanel controlPanel = new JPanel();
         
-        controPanel.setLayout(new FlowLayout());
-        controPanel.setBackground(Consts.CONTROL_COLOR);
-        newGame1.addActionListener(this); newGame2.addActionListener(this);
-        controPanel.add(newGame1); controPanel.add(newGame2); controPanel.add(player);
+        controlPanel.setLayout(new FlowLayout());
+        controlPanel.setBackground(Consts.CONTROL_COLOR);
+        undoBtn.addActionListener(this); newGame1Btn.addActionListener(this); newGame2Btn.addActionListener(this);
+        controlPanel.add(undoBtn); controlPanel.add(newGame1Btn); controlPanel.add(newGame2Btn); controlPanel.add(player);
 
         JPanel boardPanel = new JPanel();
         boardPanel.setLayout(new GridLayout(Consts.MAXROW, Consts.MAXCOL));
@@ -47,7 +47,7 @@ public class GUI extends Game implements ActionListener{
             }
         }
 
-        frame.add(controPanel, BorderLayout.NORTH);
+        frame.add(controlPanel, BorderLayout.NORTH);
         frame.add(boardPanel, BorderLayout.CENTER);
     }
 
@@ -68,8 +68,7 @@ public class GUI extends Game implements ActionListener{
     public int playGame(){
         newGame();
         updateBoard();
-        showTurn();
-        aimode = false;
+        AIPlayer = null;
         return 0;
     }
 
@@ -77,60 +76,64 @@ public class GUI extends Game implements ActionListener{
     public int playWithAI(){
         newGame();
         updateBoard();
-        showTurn();
-        aimode = true;
-        player0 = new AI(board);
+        AIPlayer = new AI(board);
         if(Consts.AITURN == 0){    
-            int col = player0.useTurn();
+            int col = AIPlayer.useTurn();
             int row = board.getTop(col) - 1;
             // slots[row][col].setColor(getChip());
-            updateBoard();
             if(board.isFinished(row, col)) winner = turn;
             changeTurn();
-            showTurn();
+            updateBoard();
         }
         return 0;
     }
     
+    private void undo(){
+        if(AIPlayer != null && board.getStackSize() >= 2){
+            System.out.println("hello?");
+            winner = -1;
+            board.undo(); changeTurn();
+            board.undo(); changeTurn(); // chnageTurn()이 두번이라 의미는 없지만 일단 넣음.
+            updateBoard();
+        } else if(AIPlayer == null && board.getStackSize() >= 1){
+            winner = -1;
+            board.undo(); changeTurn();
+            updateBoard();
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == newGame1) playGame();
-        else if(e.getSource() == newGame2) playWithAI();
+        if(e.getSource() == undoBtn) undo();
+        else if(e.getSource() == newGame1Btn) playGame();
+        else if(e.getSource() == newGame2Btn) playWithAI();
         else if(winner < 0 && !isDraw){
             final Slot btn = (Slot)e.getSource();
-
-            
             int col = btn.getCol();
             try{
                 board.insertChip(col, getChip());
             } catch(WrongInputException err){ return; } // 잘못된 입력이면 컷
             int row = board.getTop(col) - 1;
-            // slots[row][col].setColor(getChip());
-            updateBoard();
             System.out.println((row + 1) + "열" + (col + 1) + "행");
             if(board.isFinished(row, col)) winner = turn;
             else if(board.isFull()) isDraw = true;
-            else if(aimode){
-                changeTurn(); // AI의 차례
-                showTurn();
+            changeTurn(); // 차례 넘겨 주기
+            if(AIPlayer != null && winner < 0 && !isDraw){
+                updateBoard();
                 SwingUtilities.invokeLater(new Runnable(){
                     public void run(){
-                        int col = player0.useTurn();
+                        int col = AIPlayer.useTurn();
                         int row = board.getTop(col) - 1;
-                        // slots[row][col].setColor(getChip());
-                        updateBoard();
                         System.out.println("AI의 수: " + (row + 1) + "열" + (col + 1) + "행\n\n");
                         if(board.isFinished(row, col)) winner = turn;
                         else if(board.isFull()) isDraw = true;
                         changeTurn();
-                        showTurn();
+                        updateBoard();
                     }
                 });
-            } else {
-                changeTurn();
-                showTurn();
             }
         }
+        updateBoard();
     }
 
     
@@ -141,22 +144,24 @@ public class GUI extends Game implements ActionListener{
                 slots[i][j].setColor(board.get(i, j));
             }
         }
+        showTurn();
     }
 
     @Override
-    public void showTurn(){
+    protected void showTurn(){
         if(isDraw) player.setText("Draw!");
         else if(winner < 0){
             player.setText("Player " + turn + "'s turn!");
             player.setForeground(Consts.text_colors[turn]);
         }
         else{
-            if(aimode && winner == Consts.AITURN) player.setText("AI win!");
-            else player.setText("Player " + winner + "win!");
+            player.setText("Player " + winner + "win!");
+            if(AIPlayer != null && winner == Consts.AITURN) player.setText("AI win!");
             player.setForeground(Consts.text_colors[winner]);
         }
     }
 }
+
 
 class Slot extends JButton{
     int row, col;
